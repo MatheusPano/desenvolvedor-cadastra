@@ -26,3 +26,11 @@ Após instalado as dependências, para iniciar o projeto:
 ```
 npm start
 ```
+
+## 💻 Preview do projeto
+
+### Desktop
+![image-desktop](src/img/public/desktop.png)
+
+### Mobile
+![image-mobile](src/img/public/mobile.png)
