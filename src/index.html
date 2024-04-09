@@ -10,10 +10,140 @@
 </head>
 
 <body>
+  <header class="header">
+    <div class="logo">
+      <a href="/">
+        <img class="logo__image" src="./img/logo-cadastra.png" alt="Logo da empresa">
+      </a>
+    </div>
+    <div class="minicart">
+      <a class="minicart__link" href="#">
+        <img class="minicart__icon" src="./img/minicart__icon.png" alt="Ícone do carrinho">
+        <div class="minicart__count">
+          <span>0</span>
+        </div>
+      </a>
+    </div>
+  </header>
 
+  <div class="container-principal">
+    <h1 class="shirts">Blusas</h1>
+    <div class="filter-sort-mobile">
+      <button class="filter-mobile">filtrar</button>
+      <button class="sort-mobile">ordenar</button>
+    </div>
+
+    <div id="filter-menu" class="menu">
+      <div class="header-menu">
+        <button class="close-menu">X</button>
+        <h2>Filtrar</h2>
+      </div>
+      <div class="filter-options">
+        <details>
+          <summary>Cores</summary>
+          <div class="price-summary">
+            <label><input type="checkbox" class="color-filter" value="Amarelo">Amarelo</label>
+            <label><input type="checkbox" class="color-filter" value="Azul">Azul</label>
+            <label><input type="checkbox" class="color-filter" value="Preto">Preto</label>
+            <label><input type="checkbox" class="color-filter" value="Branco">Branco</label>
+            <label><input type="checkbox" class="color-filter" value="Rosa">Rosa</label>
+            <label><input type="checkbox" class="color-filter" value="Cinza">Cinza</label>
+            <label><input type="checkbox" class="color-filter" value="Laranja">Laranja</label>
+          </div>
+        </details>
+        <details>
+          <summary>Tamanhos</summary>
+          <div>
+            <div class="size">
+              <button type="button" class="btn btn-size-filter" value="P">PP</button>
+              <button type="button" class="btn btn-size-filter" value="S">P</button>
+              <button type="button" class="btn btn-size-filter" value="M">M</button>
+              <button type="button" class="btn btn-size-filter" value="G">G</button>
+              <button type="button" class="btn btn-size-filter" value="GG">GG</button>
+              <button type="button" class="btn btn-size-filter" value="U">U</button>
+              <button type="button" class="btn btn-size-filter" value="36">36</button>
+              <button type="button" class="btn btn-size-filter" value="38">38</button>
+              <button type="button" class="btn btn-size-filter" value="40">40</button>
+              <button type="button" class="btn btn-size-filter" value="44">44</button>
+              <button type="button" class="btn btn-size-filter" value="46">46</button>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Faixa de preço</summary>
+          <div class="price-range-summary">
+            <label><input type="checkbox" class="price-filter" value="0-50"> de R$0 até R$50</label>
+            <label><input type="checkbox" class="price-filter" value="51-150"> de R$51 até R$150</label>
+            <label><input type="checkbox" class="price-filter" value="151-300"> de R$151 até R$300</label>
+            <label><input type="checkbox" class="price-filter" value="301-500"> de R$301 até R$500</label>
+            <label><input type="checkbox" class="price-filter" value="501-99999999"> a partir de R$500</label>
+            <div class="btn-summary">
+              <button class="btn-apply">Aplicar</button>
+              <button class="btn-clear-summary">Limpar</button>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Menu de ordenação -->
+    <div id="sort-menu" class="menu">
+      <div class="header-menu">
+        <button class="close-menu">X</button>
+        <h2>Ordenar</h2>
+      </div>
+      <div class="sort-options">
+        <a href="">Mais recente</a>
+        <a href="">Maior preço</a>
+        <a href="">Menor preço</a>
+      </div>
+    </div>
+    <div class="container">
+      <div class="filters">
+        <h3 class="colors-title">Cores</h3>
+        <label><input type="checkbox" class="color-filter" value="Amarelo">Amarelo</label>
+        <label><input type="checkbox" class="color-filter" value="Azul">Azul</label>
+        <label><input type="checkbox" class="color-filter" value="Preto">Preto</label>
+        <label><input type="checkbox" class="color-filter" value="Branco">Branco</label>
+        <label><input type="checkbox" class="color-filter" value="Rosa">Rosa</label>
+        <label><input type="checkbox" class="color-filter" value="Cinza">Cinza</label>
+        <label><input type="checkbox" class="color-filter" value="Laranja">Laranja</label>
+
+        <h3 class="size-title">Tamanhos</h3>
+        <div class="size">
+          <button type="button" class="btn btn-size-filter" value="P">PP</button>
+          <button type="button" class="btn btn-size-filter" value="S">P</button>
+          <button type="button" class="btn btn-size-filter" value="M">M</button>
+          <button type="button" class="btn btn-size-filter" value="G">G</button>
+          <button type="button" class="btn btn-size-filter" value="GG">GG</button>
+          <button type="button" class="btn btn-size-filter" value="U">U</button>
+          <button type="button" class="btn btn-size-filter" value="36">36</button>
+          <button type="button" class="btn btn-size-filter" value="38">38</button>
+          <button type="button" class="btn btn-size-filter" value="40">40</button>
+          <button type="button" class="btn btn-size-filter" value="44">44</button>
+          <button type="button" class="btn btn-size-filter" value="46">46</button>
+        </div>
+
+
+        <h3 class="price-range-title">Faixa de Preço</h3>
+        <label><input type="checkbox" class="price-filter" value="0-50"> de R$0 até R$50</label>
+        <label><input type="checkbox" class="price-filter" value="51-150"> de R$51 até R$150</label>
+        <label><input type="checkbox" class="price-filter" value="151-300"> de R$151 até R$300</label>
+        <label><input type="checkbox" class="price-filter" value="301-500"> de R$301 até R$500</label>
+        <label><input type="checkbox" class="price-filter" value="500-9999999999"> a partir de R$500</label>
+      </div>
+
+      <div class="product-container row"></div>
+    </div>
+  </div>
+
+  <button class="load-more-button">Carregar Mais</button>
+  <footer class="footer">
+    <span>CADASTRA: Implantação de E-commerce VTEX</span>
+  </footer>
+
+  <script src="bundle.js"></script>
 </body>
-<h1>Desafio Cadastra</h1>
-
-<script src="bundle.js"></script>
 
 </html>
