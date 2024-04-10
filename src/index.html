@@ -34,12 +34,16 @@
 
   <div class="container-principal">
     <h1 class="shirts">Blusas</h1>
-    <select class="sort-dropdown">
-      <option class="teste" value="preco-crescente">Preço Crescente</option>
-      <option class="teste" value="preco-decrescente">Preço Decrescente</option>
-      <option class="teste" value="mais-recente">Mais Recente</option>
-      <option id="value-0" selected value="">Ordenar Por:</option>
-    </select>
+
+    <div class="dropdown">
+      <button class="dropdown-toggle">Ordenar Por:</button>
+      <div class="dropdown-menu">
+        <div class="dropdown-item" data-value="mais-recente">Mais Recentes</div>
+        <div class="dropdown-item" data-value="preco-crescente">Menor Preço</div>
+        <div class="dropdown-item" data-value="preco-decrescente">Maior Preço</div>
+      </div>
+    </div>
+
     <div class="filter-sort-mobile">
       <button class="filter-mobile">filtrar</button>
       <button class="sort-mobile">ordenar</button>

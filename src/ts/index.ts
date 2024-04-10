@@ -396,6 +396,33 @@ closeDrawerButton.addEventListener("click", () => {
 
 
 
+// NOTE - Dropdown Order By
+/* ------------------------------ DROPDOWN SORT ----------------------------- */
+// Função para abrir ou fechar o dropdown
+function toggleDropdown() {
+  const dropdownMenu: HTMLElement = document.querySelector('.dropdown-menu');
+  dropdownMenu.classList.toggle('open');
+}
+
+// Função para selecionar uma opção do dropdown
+function selectOption(option: string) {
+  console.log(`Opção selecionada: ${option}`);
+  // Aqui você pode adicionar o código para realizar alguma ação com a opção selecionada
+}
+
+// Adiciona event listeners para abrir ou fechar o dropdown ao clicar no botão
+document.querySelector('.dropdown-toggle').addEventListener('click', toggleDropdown);
+
+// Adiciona event listeners para selecionar uma opção ao clicar em um item do dropdown
+document.querySelectorAll('.dropdown-item').forEach((item) => {
+  item.addEventListener('click', () => {
+    const selectedOption: string = item.getAttribute('data-value');
+    selectOption(selectedOption);
+    toggleDropdown(); // Fecha o dropdown após selecionar uma opção
+  });
+});
+
+
 
 
 
