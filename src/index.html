@@ -118,13 +118,24 @@
     <div class="container">
       <div class="filters">
         <h3 class="colors-title">Cores</h3>
-        <label><input type="checkbox" class="color-filter" value="Amarelo">Amarelo</label>
-        <label><input type="checkbox" class="color-filter" value="Azul">Azul</label>
-        <label><input type="checkbox" class="color-filter" value="Preto">Preto</label>
-        <label><input type="checkbox" class="color-filter" value="Branco">Branco</label>
-        <label><input type="checkbox" class="color-filter" value="Rosa">Rosa</label>
-        <label><input type="checkbox" class="color-filter" value="Cinza">Cinza</label>
-        <label><input type="checkbox" class="color-filter" value="Laranja">Laranja</label>
+        <div class="price-summary">
+          <label><input type="checkbox" class="color-filter" value="Amarelo">Amarelo</label>
+          <label><input type="checkbox" class="color-filter" value="Azul">Azul</label>
+          <label><input type="checkbox" class="color-filter" value="Preto">Preto</label>
+          <label><input type="checkbox" class="color-filter" value="Branco">Branco</label>
+          <label><input type="checkbox" class="color-filter" value="Rosa">Rosa</label>
+          <label><input type="checkbox" class="color-filter" value="Cinza">Cinza</label>
+          <label><input type="checkbox" class="color-filter" value="Laranja">Laranja</label>
+          <button class="show-more-colors">Ver todas as cores</button>
+          <div class="extra-colors" style="display: none;">
+            <label><input type="checkbox" class="color-filter" value="Verde">Verde</label>
+            <label><input type="checkbox" class="color-filter" value="Vermelho">Vermelho</label>
+            <label><input type="checkbox" class="color-filter" value="Preto">Preto</label>
+            <label><input type="checkbox" class="color-filter" value="Rosa">Rosa</label>
+            <label><input type="checkbox" class="color-filter" value="Vinho">Vinho</label>
+          </div>
+        </div>
+       
 
         <h3 class="size-title">Tamanhos</h3>
         <div class="size">
@@ -152,9 +163,10 @@
 
       <div class="product-container row"></div>
     </div>
+    <button class="load-more-button">Carregar Mais</button>
   </div>
 
-  <button class="load-more-button">Carregar Mais</button>
+  
   <footer class="footer">
     <span>CADASTRA: Implantação de E-commerce VTEX</span>
   </footer>

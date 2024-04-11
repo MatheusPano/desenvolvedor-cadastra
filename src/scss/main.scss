@@ -249,6 +249,7 @@ body {
   height: 33px;
   background-color: var(--cor-terciaria);
   bottom: 0;
+  margin-top: 7%;
   span {
     color: var(--cor-quaternaria);
     text-align: center;
@@ -399,13 +400,10 @@ summary {
 }
 
 .color-filter:checked {
-  
   content: "■"; /* Símbolo de marca de seleção Unicode */
   font-size: 16px;
   color: #ff0000;
 }
-
-
 
 #value-0 {
   display: none;
@@ -454,7 +452,8 @@ summary {
 }
 
 .drawer.open {
-  right: 0; /* Quando a classe "open" é adicionada, o drawer será movido para a posição correta */
+  right: 0;
+  z-index: 4;
 }
 
 .close-drawer-button {
@@ -499,12 +498,11 @@ summary {
 
 .product-info {
   display: flex;
-  border-top: 1px solid black;
   border-bottom: 1px solid black;
   border-radius: 5px;
   gap: 20px;
   padding: 10px 0;
-  
+
   img {
     width: 30%;
   }
@@ -534,9 +532,9 @@ summary {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  &::after{
+  &::after {
     content: url("../img/arrow__down.png");
-  }  
+  }
 }
 
 .dropdown-menu {
@@ -565,3 +563,41 @@ summary {
 
 /* -------------------------------------------------------------------------- */
 
+.filters {
+  label {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  input {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.show-more-colors{
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
+  text-align: left;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: fit-content;
+  color: rgba(0, 0, 0, 0.5);
+  &::after{
+    content: url("../img/arrow__down.png");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+  }
+  &.active::after {
+    rotate: 180deg;
+    transform: translateY(20%);
+  }
+}

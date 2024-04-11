@@ -69,7 +69,6 @@ async function renderProducts(option?: string): Promise<void> {
   if (sortedProducts.length === 0) {
     productContainer.innerHTML = "<p class='no-products'>Nenhum produto encontrado</p>";
   } else {
-
     for (let i = 0; i < sortedProducts.length; i += productsPerRow) {
       const productsInRow: Product[] = sortedProducts.slice(i, i + productsPerRow);
 
@@ -83,7 +82,6 @@ async function renderProducts(option?: string): Promise<void> {
 
       productContainer.appendChild(productRow);
     }
-    
   }
 }
 
@@ -162,7 +160,7 @@ function applyFilters(): void {
   ).map((checkbox: HTMLInputElement) => checkbox.value);
 
   console.log("preco selecionado -->", selectedPrices);
-  const filteredProducts = products.filter((product) => {
+  let filteredProducts = products.filter((product) => {
     const hasSelectedColor =
       selectedColors.length === 0 || selectedColors.includes(product.color);
     const hasSelectedSize =
@@ -180,6 +178,11 @@ function applyFilters(): void {
 
   // Verifica se a quantidade de produtos filtrados é menor que 6
   const showLoadMoreButton = filteredProducts.length >= 6;
+
+  // Se houver um limite de produtos a serem mostrados, aplica o limite
+  if (productsPerRow * 3 < filteredProducts.length) {
+    filteredProducts = filteredProducts.slice(0, productsPerRow * 3);
+  }
 
   // Renderiza os produtos filtrados
   renderFilteredProducts(filteredProducts);
@@ -362,18 +365,16 @@ function displayProductInfo(product: Product): void {
     
   `;
 
-  // Adiciona um event listener para adicionar o produto ao carrinho ao clicar no botão "Adicionar ao Carrinho"
-  /*const addToCartButton: HTMLButtonElement = productInfoContainer.querySelector(".add-to-cart-button");
-  addToCartButton.addEventListener("click", () => {
-    addToCart(product); // Abre o minicart após adicionar o produto ao carrinho
-  });*/
-
   // Adiciona as informações do produto ao drawer
   drawerContent.appendChild(productInfoContainer);
 
   // Abre o drawer
   drawer.classList.add("open");
+
+
+
 }
+
 
 
 
@@ -400,14 +401,19 @@ closeDrawerButton.addEventListener("click", () => {
 /* ------------------------------ DROPDOWN SORT ----------------------------- */
 // Função para abrir ou fechar o dropdown
 function toggleDropdown() {
-  const dropdownMenu: HTMLElement = document.querySelector('.dropdown-menu');
+  const dropdownMenu: HTMLElement = document.querySelector('.dropdown .dropdown-menu');
   dropdownMenu.classList.toggle('open');
 }
+
 
 // Função para selecionar uma opção do dropdown
 function selectOption(option: string) {
   console.log(`Opção selecionada: ${option}`);
   // Aqui você pode adicionar o código para realizar alguma ação com a opção selecionada
+  
+  // Vamos adicionar o código para renderizar os produtos com base na opção selecionada aqui
+  applyFilters();
+  renderProducts(option);
 }
 
 // Adiciona event listeners para abrir ou fechar o dropdown ao clicar no botão
@@ -422,8 +428,24 @@ document.querySelectorAll('.dropdown-item').forEach((item) => {
   });
 });
 
+// Evento de carregamento do DOM
+document.addEventListener("DOMContentLoaded", () => {
+  // Busca os produtos do servidor
+  fetchProducts();
+  // Aplica os filtros selecionados
+  applyFilters();
+});
 
+document.addEventListener("DOMContentLoaded", () => {
+  const showMoreButton: HTMLButtonElement = document.querySelector(".show-more-colors") as HTMLButtonElement;
+  const extraColors: HTMLElement = document.querySelector(".extra-colors") as HTMLElement;
 
+  showMoreButton.addEventListener("click", () => {
+    extraColors.style.display = extraColors.style.display === "none" ? "block" : "none";
+    showMoreButton.textContent = extraColors.style.display === "none" ? "Ver todas as cores" : "Ver menos cores";
+    showMoreButton.classList.toggle("active"); // Alternância da classe active
+  });
+});
 
 
 /* ---------------------- Evento de carregamento do DOM --------------------- */
