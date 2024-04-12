@@ -222,7 +222,7 @@ body {
   }
 }
 
-#load-more-button {
+.load-more-button {
   display: block;
   margin: 20px auto;
 }
@@ -249,7 +249,7 @@ body {
   height: 33px;
   background-color: var(--cor-terciaria);
   bottom: 0;
-  margin-top: 7%;
+  margin-top: 10%;
   span {
     color: var(--cor-quaternaria);
     text-align: center;

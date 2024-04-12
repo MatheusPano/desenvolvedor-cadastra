@@ -4,12 +4,14 @@ const serverUrl: string = "http://localhost:5000";
 let products: Product[] = [];
 let cartItemCount: number = 0;
 let productsPerRow: number;
+let filteredProducts: Product[] = [];
 
 function main(): void {
   console.log(serverUrl);
 }
 
-//NOTE - Buscar Produtos
+
+// ANCHOR - Buscar Produtos
 /* ----------- Função assíncrona para buscar produtos do servidor ----------- */
 async function fetchProducts(): Promise<void> {
   try {
@@ -20,133 +22,37 @@ async function fetchProducts(): Promise<void> {
     products = await response.json();
     // Renderiza os produtos após buscá-los
     renderProducts();
+    applyFilters();
   } catch (error) {
     console.error("Erro:", error);
   }
 }
 
 
-// NOTE - Ordenar Produtos
+
+// ANCHOR - Ordenar Produtos
 /* --------------------- Função para ordenar os produtos -------------------- */
-function sortProducts(option: string, productsToSort: Product[]): Product[] {
+function sortProducts(option: string): void {
+  // Ordena apenas os produtos filtrados, em vez de todos os produtos
   switch (option) {
     case "preco-crescente":
-      return productsToSort.slice().sort((a, b) => a.price - b.price);
+      filteredProducts.sort((a: Product, b: Product) => a.price - b.price);
+      break;
     case "preco-decrescente":
-      return productsToSort.slice().sort((a, b) => b.price - a.price);
+      filteredProducts.sort((a: Product, b: Product) => b.price - a.price);
+      break;
     case "mais-recente":
-      return productsToSort
-        .slice()
-        .sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-    default:
-      return productsToSort;
+      filteredProducts.sort(
+        (a: Product, b: Product) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      break;
   }
+
+  // Renderiza os produtos filtrados após ordená-los
+  //renderFilteredProducts(filteredProducts);
 }
 
-// NOTE - Renderizar Produtos
-/* -------------- Função assíncrona para renderizar os produtos ------------- */
-async function renderProducts(option?: string): Promise<void> {
-  // Seleciona o container dos produtos no DOM
-  const productContainer: HTMLDivElement = document.querySelector(
-    ".product-container"
-  ) as HTMLDivElement;
-  // Limpa o conteúdo anterior
-  productContainer.innerHTML = "";
-
-  // Define o número de produtos por linha com base no tamanho da tela
-  productsPerRow = window.innerWidth < 768 ? 2 : 3;
-  const maxProductsToShow: number = productsPerRow * 3;
-  const productsToShow: Product[] = products.slice(0, maxProductsToShow);
-
-  // Ordena os produtos, se uma opção de ordenação for fornecida
-  const sortedProducts: Product[] = option
-    ? sortProducts(option, productsToShow)
-    : productsToShow;
-
-  // Renderiza os produtos na página
-  if (sortedProducts.length === 0) {
-    productContainer.innerHTML = "<p class='no-products'>Nenhum produto encontrado</p>";
-  } else {
-    for (let i = 0; i < sortedProducts.length; i += productsPerRow) {
-      const productsInRow: Product[] = sortedProducts.slice(i, i + productsPerRow);
-
-      const productRow: HTMLDivElement = document.createElement("div");
-      productRow.classList.add("product-row");
-
-      productsInRow.forEach((product) => {
-        const productCard: HTMLDivElement = createProductCard(product);
-        productRow.appendChild(productCard);
-      });
-
-      productContainer.appendChild(productRow);
-    }
-  }
-}
-
-// NOTE - Criar Cards
-/* ----------------- Função para criar um cartão de produto ----------------- */
-function createProductCard(product: Product): HTMLDivElement {
-  const productCard: HTMLDivElement = document.createElement("div");
-  productCard.classList.add("product-card");
-
-  productCard.innerHTML = `
-    <img src="${product.image}" alt="${product.name}">
-    <h2 class="product-name">${product.name}</h2>
-    <p class="product-price">R$ ${formatPrice(product.price)}</p>
-    <p class="parcelamento">até ${formatParcelamento(product.parcelamento)}</p>
-    <button class="buy-button">Comprar</button>
-  `;
-
-  productCard.querySelector(".buy-button")?.addEventListener("click", () => {
-    addToCart(product);
-    displayProductInfo(product)
-
-  });
-
-  return productCard;
-}
-
-
-// NOTE - Add MiniCart
-/* -------------- Função para adicionar um produto ao carrinho -------------- */
-function addToCart(product: Product): void {
-  cartItemCount++;
-  updateCartItemCount();
-}
-
-
-// NOTE - Att Contador
-/* ---------- Função para atualizar o contador de itens no carrinho --------- */
-function updateCartItemCount(): void {
-  const cartItemCountElement: HTMLElement = document.querySelector(
-    ".minicart__count span"
-  ) as HTMLElement;
-  if (cartItemCountElement) {
-    cartItemCountElement.textContent = cartItemCount.toString();
-  }
-}
-
-
-// NOTE - Formated Price
-/* ---------------------- Função para formatar o preço ---------------------- */
-function formatPrice(price: number): string {
-  return price.toFixed(2).replace(".", ",");
-}
-
-
-// NOTE - Formatar o parcelamento
-/* ------------------- Função para formatar o parcelamento ------------------ */
-function formatParcelamento(parcelamento: number[]): string {
-  if (parcelamento.length !== 2) {
-    throw new Error("erro de parcelamento");
-  }
-  return `${parcelamento[0]}x de R$${formatPrice(parcelamento[1])}`;
-}
-
-
-// NOTE - Aplicar os filtros
+// ANCHOR - Aplicar os filtros
 /* -------------- Função para aplicar os filtros selecionados -------------- */
 function applyFilters(): void {
   const selectedColors = Array.from(
@@ -160,7 +66,7 @@ function applyFilters(): void {
   ).map((checkbox: HTMLInputElement) => checkbox.value);
 
   console.log("preco selecionado -->", selectedPrices);
-  let filteredProducts = products.filter((product) => {
+  filteredProducts = products.filter((product) => {
     const hasSelectedColor =
       selectedColors.length === 0 || selectedColors.includes(product.color);
     const hasSelectedSize =
@@ -185,6 +91,7 @@ function applyFilters(): void {
   }
 
   // Renderiza os produtos filtrados
+  console.log("produtos filtrados-->", filteredProducts)
   renderFilteredProducts(filteredProducts);
 
   // Seleciona o botão de "Carregar Mais"
@@ -193,8 +100,114 @@ function applyFilters(): void {
   loadMoreButton.style.display = showLoadMoreButton ? "block" : "none";
 }
 
+// ANCHOR - Renderizar Produtos
+/* -------------- Função assíncrona para renderizar os produtos ------------- */
+async function renderProducts(option?: string): Promise<void> {
+  // Seleciona o container dos produtos no DOM
+  const productContainer: HTMLDivElement = document.querySelector(
+    ".product-container"
+  ) as HTMLDivElement;
+  // Limpa o conteúdo anterior
+  productContainer.innerHTML = "";
 
-// NOTE - Renderizar Prod. Filtrados
+  // Define o número de produtos por linha com base no tamanho da tela
+  productsPerRow = window.innerWidth < 768 ? 2 : 3;
+  const maxProductsToShow: number = productsPerRow * 3;
+
+  // Se uma opção de ordenação for fornecida, ordena os produtos filtrados
+  if (option) {
+    sortProducts(option);
+    console.log(filteredProducts)
+  }
+
+
+  // Limita a quantidade de produtos filtrados a serem mostrados
+  const productsToShow: Product[] = filteredProducts.slice(0, maxProductsToShow);
+
+  // Renderiza os produtos na página
+  if (productsToShow.length === 0) {
+    productContainer.innerHTML = "<p class='no-products'>Nenhum produto encontrado</p>";
+  } else {
+    for (let i = 0; i < productsToShow.length; i += productsPerRow) {
+      const productsInRow: Product[] = productsToShow.slice(i, i + productsPerRow);
+
+      const productRow: HTMLDivElement = document.createElement("div");
+      productRow.classList.add("product-row");
+
+      productsInRow.forEach((product) => {
+        const productCard: HTMLDivElement = createProductCard(product);
+        productRow.appendChild(productCard);
+      });
+
+      productContainer.appendChild(productRow);
+    }
+  }
+}
+
+
+// ANCHOR - Criar Cards
+/* ----------------- Função para criar um cartão de produto ----------------- */
+function createProductCard(product: Product): HTMLDivElement {
+  const productCard: HTMLDivElement = document.createElement("div");
+  productCard.classList.add("product-card");
+
+  productCard.innerHTML = `
+    <img src="${product.image}" alt="${product.name}">
+    <h2 class="product-name">${product.name}</h2>
+    <p class="product-price">R$ ${formatPrice(product.price)}</p>
+    <p class="parcelamento">até ${formatParcelamento(product.parcelamento)}</p>
+    <button class="buy-button">Comprar</button>
+  `;
+
+  productCard.querySelector(".buy-button")?.addEventListener("click", () => {
+    addToCart(product);
+    displayProductInfo(product)
+
+  });
+
+  return productCard;
+}
+
+
+// ANCHOR - Add MiniCart
+/* -------------- Função para adicionar um produto ao carrinho -------------- */
+function addToCart(product: Product): void {
+  cartItemCount++;
+  updateCartItemCount();
+}
+
+
+// ANCHOR - Att Contador
+/* ---------- Função para atualizar o contador de itens no carrinho --------- */
+function updateCartItemCount(): void {
+  const cartItemCountElement: HTMLElement = document.querySelector(
+    ".minicart__count span"
+  ) as HTMLElement;
+  if (cartItemCountElement) {
+    cartItemCountElement.textContent = cartItemCount.toString();
+  }
+}
+
+
+// ANCHOR - Formated Price
+/* ---------------------- Função para formatar o preço ---------------------- */
+function formatPrice(price: number): string {
+  return price.toFixed(2).replace(".", ",");
+}
+
+
+// ANCHOR - Formatar o parcelamento
+/* ------------------- Função para formatar o parcelamento ------------------ */
+function formatParcelamento(parcelamento: number[]): string {
+  if (parcelamento.length !== 2) {
+    throw new Error("erro de parcelamento");
+  }
+  return `${parcelamento[0]}x de R$${formatPrice(parcelamento[1])}`;
+}
+
+
+
+// ANCHOR - Renderizar Prod. Filtrados
 /* -------------- Função para renderizar os produtos filtrados -------------- */
 function renderFilteredProducts(filteredProducts: Product[]): void {
   const productContainer: HTMLDivElement = document.querySelector(
@@ -222,7 +235,7 @@ function renderFilteredProducts(filteredProducts: Product[]): void {
 }
 
 
-// NOTE - Carregamento DOM
+// ANCHOR - Carregamento DOM
 /* ---------------------- Evento de carregamento do DOM --------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   // Busca os produtos do servidor
@@ -250,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// NOTE - Carregamento DOM
+// ANCHOR - Carregamento DOM
  /* ---------------------- Evento de carregamento do DOM --------------------- */
 document.addEventListener("DOMContentLoaded", function () {
   // Seleciona os botões mobile de filtro e ordenação
@@ -284,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// NOTE - Renderizar Dropdown
+// ANCHOR - Renderizar Dropdown
 /* ------------- Função para renderizar o dropdown de ordenação ------------- */
 function renderSortDropdown(): void {
   const sortDropdown: HTMLSelectElement = document.querySelector(
@@ -301,7 +314,7 @@ function renderSortDropdown(): void {
 }
 
 
-// NOTE - Renderizar Prod. Restantes
+// ANCHOR - Renderizar Prod. Restantes
 /* ----------------- Função para renderizar os produtos restantes ------------- */
 function renderRemainingProducts(startIndex: number): void {
   const productContainer: HTMLDivElement = document.querySelector(
@@ -331,7 +344,7 @@ function renderRemainingProducts(startIndex: number): void {
 }
 
 
-// NOTE - Carregar Mais
+// ANCHOR - Carregar Mais
 /* ----------------- Evento de clique no botão "Carregar Mais" -------------- */
 document.querySelector(".load-more-button")?.addEventListener("click", () => {
   // Determina o índice a partir do qual os produtos adicionais serão exibidos
@@ -342,7 +355,7 @@ document.querySelector(".load-more-button")?.addEventListener("click", () => {
 });
 
 
-//NOTE - Barra Lateral
+//ANCHOR - Barra Lateral
 /* --------------------- Função para exibir as informações do produto na barra lateral --------------------- */
 function displayProductInfo(product: Product): void {
   const drawer: HTMLElement = document.querySelector(".drawer");
@@ -378,7 +391,7 @@ function displayProductInfo(product: Product): void {
 
 
 
-// NOTE - Abrir minicart c/ Icone
+// ANCHOR - Abrir minicart c/ Icone
 /* --------------------- Icone minicart abre o carrinho --------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   // Adiciona evento de clique na div com a classe ".minicart" para abrir o drawer
@@ -397,7 +410,7 @@ closeDrawerButton.addEventListener("click", () => {
 
 
 
-// NOTE - Dropdown Order By
+// ANCHOR - Dropdown Order By
 /* ------------------------------ DROPDOWN SORT ----------------------------- */
 // Função para abrir ou fechar o dropdown
 function toggleDropdown() {
